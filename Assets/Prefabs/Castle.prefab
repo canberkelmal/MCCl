@@ -12,12 +12,13 @@ GameObject:
   - component: {fileID: 7822259494420915180}
   - component: {fileID: 8325299731334707290}
   - component: {fileID: 1383718540559964391}
+  - component: {fileID: 1560982358}
   m_Layer: 0
   m_Name: Castle
   m_TagString: Castle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &1328860988738703789
 Transform:
@@ -97,3 +98,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1560982358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2585996644795924485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b0085a69b0f074478cc4e884a8b55e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waveEnemyCount: 10
+  health: 100

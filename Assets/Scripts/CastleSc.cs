@@ -7,11 +7,49 @@ public class CastleSc : MonoBehaviour
     GameManager gM;
     public int waveEnemyCount = 10;
     int tempThrowedCount = 0;
+    int hitCount = 0;
+    float timer = 0;
+    public int health = 100;
     // Start is called before the first frame update
     void Start()
     {
         gM = GameObject.Find("GameManager").GetComponent<GameManager>();
         InvokeRepeating("SendWaves", 1, 7);
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.CompareTag("Char"))
+        {
+            hitCount++;
+            if (hitCount == health)
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
+
+    void OnCollisionStay(Collision collision)
+    {
+        if (collision.transform.CompareTag("Char"))
+        {
+            timer += Time.deltaTime;
+        }
+
+        if (timer >= gM.hitTimeDiff)
+        {
+            timer = 0;
+
+            if (collision.transform.CompareTag("Char"))
+            {
+                hitCount++;
+                if (hitCount == health)
+                {
+                    Destroy(gameObject);
+                }
+            }
+        }
+
     }
 
     void SendWaves()
