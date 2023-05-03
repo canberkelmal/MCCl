@@ -10,9 +10,11 @@ public class GameManager : MonoBehaviour
                  xMax = 1f;
 
     public Transform player;
-    public GameObject char1, char2, castleLeft, castleRight;
+    public GameObject char1, char2, enemy1, enemy2, castleLeft, castleRight;
     public float throwForce = 1f;
     public float defCharForwardForce = 1f;
+    public float defEnemyForwardForce = 1f;
+    public float hitTimeDiff = 0.5f;
 
     // Start is called before the first frame update
     void Start()

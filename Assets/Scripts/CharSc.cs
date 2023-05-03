@@ -11,6 +11,10 @@ public class CharSc : MonoBehaviour
     Vector3 direction;
     bool clonable = false;
     bool throwed = false;
+    float timer = 0;
+
+    int hitCount = 0;
+    public int health = 4;
     // Start is called before the first frame update
     void Awake()
     {
@@ -31,9 +35,48 @@ public class CharSc : MonoBehaviour
     {
         if (other.CompareTag("Gate") && clonable)
         {
-            DuplicateChar(4);
+            DuplicateChar(2);
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.CompareTag("Enemy"))
+        {
+            hitCount++;
+            if (hitCount == health)
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
+    void OnCollisionStay(Collision collision)
+    {
+        if (collision.transform.CompareTag("Enemy"))
+        {
+            timer += Time.deltaTime;
+        }
+
+        if (timer >= gM.hitTimeDiff)
+        {
+            timer = 0;
+
+            if (collision.transform.CompareTag("Enemy"))
+            {
+                hitCount++;
+                if (hitCount == health)
+                {
+                    Destroy(gameObject);
+                }
+            }
+        }
+
+    }
+
+
+
+
+
     public void DuplicateChar(int duplicateMultiplier)
     {
         for(int i = 0; i < duplicateMultiplier; i++)
