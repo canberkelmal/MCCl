@@ -7,7 +7,7 @@ public class CastleSc : MonoBehaviour
     GameManager gM;
     public int waveEnemyCount = 10;
     int tempThrowedCount = 0;
-    int hitCount = 0;
+    public int hitCount = 0;
     float timer = 0;
     public int health = 100;
     // Start is called before the first frame update
@@ -24,7 +24,7 @@ public class CastleSc : MonoBehaviour
             hitCount++;
             if (hitCount == health)
             {
-                Destroy(gameObject);
+                gM.DestroyCastle(gameObject);
             }
         }
     }
@@ -45,7 +45,8 @@ public class CastleSc : MonoBehaviour
                 hitCount++;
                 if (hitCount == health)
                 {
-                    Destroy(gameObject);
+                    gM.DestroyCastle(gameObject);
+                    //Destroy(gameObject);
                 }
             }
         }

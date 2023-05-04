@@ -27,7 +27,18 @@ public class CharSc : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {        
-        direction = transform.position.x<0 ? (gM.castleLeft.transform.position - transform.position).normalized : (gM.castleRight.transform.position - transform.position).normalized;
+        switch (gM.castleCount)
+        {
+            case 2:
+                direction = transform.position.x < 0 ? (gM.castleLeft.transform.position - transform.position).normalized : (gM.castleRight.transform.position - transform.position).normalized;
+                break;
+            case 1:
+                direction = (gM.castleLast.transform.position - transform.position).normalized;
+                break;
+            case 0:
+                Destroy(gameObject);
+                break;
+        }
         rb.velocity = direction * forwardForce;
     }
 

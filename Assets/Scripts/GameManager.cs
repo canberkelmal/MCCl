@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,11 +11,13 @@ public class GameManager : MonoBehaviour
                  xMax = 1f;
 
     public Transform player;
-    public GameObject char1, char2, enemy1, enemy2, castleLeft, castleRight;
+    public GameObject char1, char2, enemy1, enemy2, castleLeft, castleRight, castleLast;
     public float throwForce = 1f;
     public float defCharForwardForce = 1f;
     public float defEnemyForwardForce = 1f;
     public float hitTimeDiff = 0.5f;
+
+    public int castleCount = 2;
 
     // Start is called before the first frame update
     void Start()
@@ -71,6 +74,28 @@ public class GameManager : MonoBehaviour
     {
         GameObject spawnedChar = Instantiate(char1, player.position + Vector3.forward * 4, Quaternion.identity);
         spawnedChar.GetComponent<CharSc>().ThrowChar();
+    }
+
+    public void DestroyCastle(GameObject destroyedCastle)
+    {
+        if(castleCount == 2)
+        {
+            castleLast = destroyedCastle == castleLeft ? castleRight : castleLeft;
+            castleCount--;
+            Destroy(destroyedCastle);
+        }
+        else if(castleCount == 1)
+        {
+            castleLast = destroyedCastle == castleLeft ? castleRight : castleLeft;
+            castleCount--;
+            Destroy(destroyedCastle);
+            GoNextChapter();
+        }
+    }
+
+    void GoNextChapter()
+    {
+        Debug.Log("Go to next chapter!");
     }
 
     // Reload the current scene to restart the game

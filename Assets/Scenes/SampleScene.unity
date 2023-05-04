@@ -153,8 +153,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   horizontalSens: 1
-  xMin: -9
-  xMax: 9
+  xMin: -10
+  xMax: 10
   player: {fileID: 372911683}
   char1: {fileID: 2592646937628590630, guid: cd998929a6776594f826650f4fbc5111, type: 3}
   char2: {fileID: 0}
@@ -162,10 +162,12 @@ MonoBehaviour:
   enemy2: {fileID: 0}
   castleLeft: {fileID: 215963225}
   castleRight: {fileID: 1560982353}
+  castleLast: {fileID: 0}
   throwForce: 8
   defCharForwardForce: 5
   defEnemyForwardForce: 5
   hitTimeDiff: 0.5
+  castleCount: 2
 --- !u!4 &133115851
 Transform:
   m_ObjectHideFlags: 0
