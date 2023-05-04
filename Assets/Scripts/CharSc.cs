@@ -84,15 +84,14 @@ public class CharSc : MonoBehaviour
 
     }
 
-
-
-
-
     public void DuplicateChar(int duplicateMultiplier)
     {
+        float tempHorRandom = 0;
         for(int i = 0; i < duplicateMultiplier; i++)
         {
-            Instantiate(gameObject, transform.position + (Vector3.right * 0.6f * i) + (Vector3.forward), transform.rotation);
+            float horRandom = (float)Random.Range(-duplicateMultiplier*3, duplicateMultiplier*3) / 10;
+            float verRandom = (float)Random.Range(6, 12) / 10;
+            Instantiate(gameObject, transform.position + (Vector3.right * horRandom) + (Vector3.forward * verRandom), transform.rotation);
         }
         Destroy(gameObject);
     }

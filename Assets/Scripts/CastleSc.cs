@@ -62,8 +62,10 @@ public class CastleSc : MonoBehaviour
     {
         if(tempThrowedCount < waveEnemyCount)
         {
-            GameObject spawnedChar = Instantiate(gM.enemy1, transform.position - Vector3.forward * 5, transform.rotation);
-            Vector3 throwDirection = transform.forward * gM.defEnemyForwardForce * 2 + transform.right * UnityEngine.Random.Range(-4f, 4f);
+            Vector3 spawnPoint = transform.position - transform.up * 4;
+            spawnPoint.y = 1.1f;
+            GameObject spawnedChar = Instantiate(gM.enemy1, spawnPoint, transform.rotation);
+            Vector3 throwDirection = -transform.up * gM.defEnemyForwardForce * 2 + transform.right * (float)Random.Range(-4f, 4f);
             spawnedChar.GetComponent<EnemySc>().ThrowEnemy(throwDirection);
             tempThrowedCount++;
         }
