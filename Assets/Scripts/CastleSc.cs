@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class CastleSc : MonoBehaviour
 {
@@ -21,15 +22,7 @@ public class CastleSc : MonoBehaviour
     {
         if (collision.transform.CompareTag("Char") || collision.transform.CompareTag("Giant"))
         {
-            hitCount++;
-            if (collision.transform.CompareTag("Giant"))
-            {
-                collision.gameObject.GetComponent<CharSc>().Punch();
-            }
-            if (hitCount == health)
-            {
-                gM.DestroyCastle(gameObject);
-            }
+            HitToCastle(collision.gameObject);
         }
     }
 
@@ -46,16 +39,44 @@ public class CastleSc : MonoBehaviour
 
             if (collision.transform.CompareTag("Char") || collision.transform.CompareTag("Giant"))
             {
-                hitCount++;
-                if (collision.transform.CompareTag("Giant"))
-                {
-                    collision.gameObject.GetComponent<CharSc>().Punch();
-                }
-                if (hitCount == health)
-                {
-                    gM.DestroyCastle(gameObject);
-                }
+                HitToCastle(collision.gameObject);
             }
+        }
+    }
+
+    void HitToCastle(GameObject hittingChar)
+    {
+        StartCoroutine(CastleHitAnimation());
+        hitCount++;
+        if (hittingChar.transform.CompareTag("Giant"))
+        {
+            hittingChar.GetComponent<CharSc>().Punch();
+        }
+        if (hitCount == health)
+        {
+            gM.DestroyCastle(gameObject);
+        }
+    }
+
+
+    IEnumerator CastleHitAnimation()
+    {
+        SkinnedMeshRenderer renderer = gameObject.GetComponent<SkinnedMeshRenderer>();
+        for(int i = 0; i < 101; i++)
+        {
+            renderer.SetBlendShapeWeight(0, i);
+            yield return new WaitForSeconds(gM.castleHitAnimSens);
+        }
+        for(int i = 0;i < 101; i++)
+        {
+            renderer.SetBlendShapeWeight(1, i);
+            renderer.SetBlendShapeWeight(0, 100-i);
+            yield return new WaitForSeconds(gM.castleHitAnimSens);
+        }
+        for (int i = 0; i < 101; i++)
+        {
+            renderer.SetBlendShapeWeight(1, 100-i);
+            yield return new WaitForSeconds(gM.castleHitAnimSens);
         }
     }
 
@@ -71,6 +92,7 @@ public class CastleSc : MonoBehaviour
             Vector3 spawnPoint = transform.position - transform.up * 4;
             spawnPoint.y = 1.1f;
             GameObject spawnedChar = Instantiate(gM.enemy1, spawnPoint, transform.rotation);
+            spawnedChar.GetComponent<NavMeshAgent>().avoidancePriority = UnityEngine.Random.Range(0, 50);
             Vector3 throwDirection = -transform.up * gM.defEnemyForwardForce * 2 + transform.right * (float)Random.Range(-4f, 4f);
             spawnedChar.GetComponent<EnemySc>().ThrowEnemy(throwDirection);
             tempThrowedCount++;

@@ -2,12 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public float cannonAnimSens = 0.002f,
+    public float castleHitAnimSens = 0.002f,
+                 cannonAnimSens = 0.002f,
                  horizontalSens = 1f, 
                  xMin = 1f,
                  xMax = 1f;
@@ -118,6 +120,8 @@ public class GameManager : MonoBehaviour
     {
         GameObject spawnedChar = Instantiate(spawnedCharacter, player.position + Vector3.forward * 2.5f, Quaternion.identity);
         spawnedChar.GetComponent<CharSc>().ThrowChar();
+
+        spawnedChar.GetComponent<NavMeshAgent>().avoidancePriority = spawnedChar.CompareTag("Giant") ? 99 : UnityEngine.Random.Range(0, 50);
 
         if (!isGiant)
         {
