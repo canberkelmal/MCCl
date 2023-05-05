@@ -29,7 +29,7 @@ public class EnemySc : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.transform.CompareTag("Char"))
+        if (collision.transform.CompareTag("Char") || collision.transform.CompareTag("Giant"))
         {
             hitCount++;
             if (hitCount == health)
@@ -41,7 +41,7 @@ public class EnemySc : MonoBehaviour
 
     void OnCollisionStay(Collision collision)
     {
-        if (collision.transform.CompareTag("Char"))
+        if (collision.transform.CompareTag("Char") || collision.transform.CompareTag("Giant"))
         {
             timer += Time.deltaTime;
         }
@@ -50,7 +50,7 @@ public class EnemySc : MonoBehaviour
         {
             timer = 0;
 
-            if (collision.transform.CompareTag("Char"))
+            if (collision.transform.CompareTag("Char") || collision.transform.CompareTag("Giant"))
             {
                 hitCount++;
                 if (hitCount == health)

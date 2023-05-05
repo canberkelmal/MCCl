@@ -9,6 +9,7 @@ TagManager:
   - Wall
   - Char
   - Enemy
+  - Giant
   layers:
   - Default
   - TransparentFX

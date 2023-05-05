@@ -52,7 +52,7 @@ public class CharSc : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.transform.CompareTag("Enemy"))
+        if (collision.transform.CompareTag("Enemy") || collision.transform.CompareTag("Castle"))
         {
             hitCount++;
             if (hitCount == health)
@@ -63,7 +63,7 @@ public class CharSc : MonoBehaviour
     }
     void OnCollisionStay(Collision collision)
     {
-        if (collision.transform.CompareTag("Enemy"))
+        if (collision.transform.CompareTag("Enemy") || collision.transform.CompareTag("Castle"))
         {
             timer += Time.deltaTime;
         }
@@ -72,7 +72,7 @@ public class CharSc : MonoBehaviour
         {
             timer = 0;
 
-            if (collision.transform.CompareTag("Enemy"))
+            if (collision.transform.CompareTag("Enemy") || collision.transform.CompareTag("Castle"))
             {
                 hitCount++;
                 if (hitCount == health)
@@ -103,5 +103,10 @@ public class CharSc : MonoBehaviour
         forwardForce = throwed ? forwardForce : gM.defCharForwardForce;
         throwed = false;
         clonable = true;
+    }
+
+    public void Punch()
+    {
+        GetComponent<Animator>().SetTrigger("PunchTrig");
     }
 }

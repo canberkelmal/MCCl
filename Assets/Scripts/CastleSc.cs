@@ -19,9 +19,13 @@ public class CastleSc : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.transform.CompareTag("Char"))
+        if (collision.transform.CompareTag("Char") || collision.transform.CompareTag("Giant"))
         {
             hitCount++;
+            if (collision.transform.CompareTag("Giant"))
+            {
+                collision.gameObject.GetComponent<CharSc>().Punch();
+            }
             if (hitCount == health)
             {
                 gM.DestroyCastle(gameObject);
@@ -31,7 +35,7 @@ public class CastleSc : MonoBehaviour
 
     void OnCollisionStay(Collision collision)
     {
-        if (collision.transform.CompareTag("Char"))
+        if (collision.transform.CompareTag("Char") || collision.transform.CompareTag("Giant"))
         {
             timer += Time.deltaTime;
         }
@@ -40,17 +44,19 @@ public class CastleSc : MonoBehaviour
         {
             timer = 0;
 
-            if (collision.transform.CompareTag("Char"))
+            if (collision.transform.CompareTag("Char") || collision.transform.CompareTag("Giant"))
             {
                 hitCount++;
+                if (collision.transform.CompareTag("Giant"))
+                {
+                    collision.gameObject.GetComponent<CharSc>().Punch();
+                }
                 if (hitCount == health)
                 {
                     gM.DestroyCastle(gameObject);
-                    //Destroy(gameObject);
                 }
             }
         }
-
     }
 
     void SendWaves()
