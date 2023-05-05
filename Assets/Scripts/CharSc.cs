@@ -81,12 +81,10 @@ public class CharSc : MonoBehaviour
                 }
             }
         }
-
     }
 
     public void DuplicateChar(int duplicateMultiplier)
     {
-        float tempHorRandom = 0;
         for(int i = 0; i < duplicateMultiplier; i++)
         {
             float horRandom = (float)Random.Range(-duplicateMultiplier*3, duplicateMultiplier*3) / 10;

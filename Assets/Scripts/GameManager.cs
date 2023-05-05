@@ -3,15 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public float horizontalSens = 1f, 
+    public float cannonAnimSens = 0.002f,
+                 horizontalSens = 1f, 
                  xMin = 1f,
                  xMax = 1f;
 
+    public Image attackBar, attackBarYellow;
     public Transform player;
-    public GameObject char1, char2, enemy1, enemy2, castleLeft, castleRight, castleLast;
+    public GameObject cannon, char1, giant, enemy1, enemy2, castleLeft, castleRight, castleLast;
     public float throwForce = 1f;
     public float defCharForwardForce = 1f;
     public float defEnemyForwardForce = 1f;
@@ -22,7 +25,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        cannon = player.GetChild(0).GetChild(0).gameObject;
     }
 
     // Update is called once per frame
@@ -63,17 +66,76 @@ public class GameManager : MonoBehaviour
 
     void StartCharSpawning()
     {
-        InvokeRepeating("SpawnAndThrowChar",0f , 0.5f);
+        InvokeRepeating("SpawnAndThrowChar",0f , 0.33f);
     }
     void StopCharSpawning()
     {
         CancelInvoke("SpawnAndThrowChar");
+
+        if(attackBar.fillAmount >= 1)
+        {
+            SpawnAndThrowGiant();
+        }
+    }
+
+    void SpawnAndThrowGiant()
+    {
+        StartCoroutine(CannonAnimStart(giant, true));
     }
 
     void SpawnAndThrowChar()
     {
-        GameObject spawnedChar = Instantiate(char1, player.position + Vector3.forward * 4, Quaternion.identity);
+        StartCoroutine(CannonAnimStart(char1, false));
+    }
+    IEnumerator CannonAnimStart(GameObject throwedCharacter, bool isGiant)
+    {
+        for (int i = 0; i <= 100; i++)
+        {
+            cannon.GetComponent<SkinnedMeshRenderer>().SetBlendShapeWeight(0, i);
+            i++;
+            yield return new WaitForSeconds(cannonAnimSens);
+        }
+
+        for (int i = 0; i <= 100; i++)
+        {
+            cannon.GetComponent<SkinnedMeshRenderer>().SetBlendShapeWeight(1, i);
+            cannon.GetComponent<SkinnedMeshRenderer>().SetBlendShapeWeight(0, 100 - i);
+            i++;
+            yield return new WaitForSeconds(cannonAnimSens);
+        }
+
+        SpawnChar(throwedCharacter, isGiant);
+
+        for (int i = 100; i >= 0; i--)
+        {
+            cannon.GetComponent<SkinnedMeshRenderer>().SetBlendShapeWeight(1, i);
+            i--;
+            yield return new WaitForSeconds(cannonAnimSens);
+        }
+    }
+
+    void SpawnChar(GameObject spawnedCharacter, bool isGiant)
+    {
+        GameObject spawnedChar = Instantiate(spawnedCharacter, player.position + Vector3.forward * 2.5f, Quaternion.identity);
         spawnedChar.GetComponent<CharSc>().ThrowChar();
+
+        if (!isGiant)
+        {
+            if(attackBar.fillAmount < 1)
+            {
+                attackBar.fillAmount += 0.04f;
+            }
+            else
+            {
+                attackBar.fillAmount = 1;
+                attackBarYellow.enabled = true;
+            }
+        }
+        else
+        {
+            attackBar.fillAmount = 0;
+            attackBarYellow.enabled = false;
+        }
     }
 
     public void DestroyCastle(GameObject destroyedCastle)
