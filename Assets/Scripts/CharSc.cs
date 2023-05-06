@@ -12,9 +12,13 @@ public class CharSc : MonoBehaviour
     bool clonable = false;
     bool throwed = false;
     float timer = 0;
+    float colorTimer;
 
     int hitCount = 0;
     public int health = 4;
+
+    Material defMat, tempMat;
+    bool whiting = true;
     // Start is called before the first frame update
     void Awake()
     {
@@ -22,6 +26,10 @@ public class CharSc : MonoBehaviour
         gM = GameObject.Find("GameManager").GetComponent<GameManager>();
         forwardForce = gM.defCharForwardForce * 2;
         Invoke("SetClonable", 0.2f);
+    }
+    void Start()
+    {
+        tempMat = new Material(gM.charMat);
     }
 
     // Update is called once per frame
@@ -54,11 +62,7 @@ public class CharSc : MonoBehaviour
     {
         if (collision.transform.CompareTag("Enemy") || collision.transform.CompareTag("Castle"))
         {
-            hitCount++;
-            if (hitCount == health)
-            {
-                Destroy(gameObject);
-            }
+            TakeHit();
         }
     }
     void OnCollisionStay(Collision collision)
@@ -74,12 +78,44 @@ public class CharSc : MonoBehaviour
 
             if (collision.transform.CompareTag("Enemy") || collision.transform.CompareTag("Castle"))
             {
-                hitCount++;
-                if (hitCount == health)
-                {
-                    Destroy(gameObject);
-                }
+                TakeHit();
             }
+        }
+    }
+
+    void TakeHit()
+    {
+        whiting = true;
+        tempMat.color = gM.charMat.color;
+        colorTimer = 0;
+        transform.GetChild(0).GetComponent<Renderer>().material = tempMat;
+        InvokeRepeating("PaintWhite", 0, Time.fixedDeltaTime);
+
+        hitCount++;
+        if (hitCount == health)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+
+    void PaintWhite()
+    {
+        colorTimer += Time.deltaTime;
+        if (colorTimer > gM.hitColorDur * 0.4f)
+        {
+            whiting = false;
+        }
+
+        if (colorTimer < gM.hitColorDur)
+        {
+            tempMat.color = whiting ? Color.Lerp(tempMat.color, Color.white, gM.hitColorSense * Time.deltaTime) : Color.Lerp(tempMat.color, gM.charMat.color, gM.hitColorSense * Time.deltaTime);
+        }
+        else
+        {
+            tempMat.color = gM.charMat.color;
+            transform.GetChild(0).GetComponent<Renderer>().material = gM.charMat;
+            CancelInvoke("PaintWhite");
         }
     }
 
