@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class CastleSc : MonoBehaviour
 {
@@ -49,6 +50,7 @@ public class CastleSc : MonoBehaviour
         gM.HitToAnyCastle(gameObject);
         StartCoroutine(CastleHitAnimation());
         hitCount++;
+        transform.GetChild(0).GetChild(0).GetComponent<Text>().text = (health - hitCount).ToString();
         if (hittingChar.transform.CompareTag("Giant"))
         {
             hittingChar.GetComponent<CharSc>().Punch();

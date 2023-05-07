@@ -780,7 +780,7 @@ PrefabInstance:
     - target: {fileID: 904187863883669294, guid: 5414909be02e69e43b9294532d96b909,
         type: 3}
       propertyPath: waveEnemyCount
-      value: 10
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5414909be02e69e43b9294532d96b909, type: 3}
@@ -2286,12 +2286,12 @@ PrefabInstance:
     - target: {fileID: 904187863883669294, guid: 5414909be02e69e43b9294532d96b909,
         type: 3}
       propertyPath: health
-      value: 5
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 904187863883669294, guid: 5414909be02e69e43b9294532d96b909,
         type: 3}
       propertyPath: waveEnemyCount
-      value: 1
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5414909be02e69e43b9294532d96b909, type: 3}
@@ -4169,7 +4169,7 @@ PrefabInstance:
     - target: {fileID: 861235726615449438, guid: b9d358a4894645f4b84163658f289c7b,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b9d358a4894645f4b84163658f289c7b, type: 3}
@@ -4554,7 +4554,7 @@ PrefabInstance:
     - target: {fileID: 904187863883669294, guid: 5414909be02e69e43b9294532d96b909,
         type: 3}
       propertyPath: waveEnemyCount
-      value: 10
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 5080521996652947508, guid: 5414909be02e69e43b9294532d96b909,
         type: 3}
@@ -5966,7 +5966,7 @@ PrefabInstance:
     - target: {fileID: 861235726615449438, guid: b9d358a4894645f4b84163658f289c7b,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b9d358a4894645f4b84163658f289c7b, type: 3}
@@ -6554,12 +6554,12 @@ PrefabInstance:
     - target: {fileID: 904187863883669294, guid: 5414909be02e69e43b9294532d96b909,
         type: 3}
       propertyPath: health
-      value: 5
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 904187863883669294, guid: 5414909be02e69e43b9294532d96b909,
         type: 3}
       propertyPath: waveEnemyCount
-      value: 1
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 5080521996652947508, guid: 5414909be02e69e43b9294532d96b909,
         type: 3}

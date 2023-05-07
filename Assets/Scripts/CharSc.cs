@@ -24,8 +24,8 @@ public class CharSc : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         gM = GameObject.Find("GameManager").GetComponent<GameManager>();
-        forwardForce = gM.defCharForwardForce;
-        float clonableDelayTime = gameObject.CompareTag("Giant") ? 0.65f : 0.3f;
+        forwardForce = gameObject.CompareTag("Giant") ? gM.defCharForwardForce  * 2 : gM.defCharForwardForce;
+        float clonableDelayTime = gameObject.CompareTag("Giant") ? 0.4f : 0.3f;
         Invoke("SetClonable", clonableDelayTime);
     }
     void Start()
@@ -40,7 +40,7 @@ public class CharSc : MonoBehaviour
         switch (gM.castleCount)
         {
             case 2:
-                direction = transform.position.x < 0 ? (gM.castleLeft.transform.position - transform.position).normalized : (gM.castleRight.transform.position - transform.position).normalized;
+                direction = (gM.castleLeft.transform.position - transform.position).magnitude < (gM.castleRight.transform.position - transform.position).magnitude ? (gM.castleLeft.transform.position - transform.position).normalized : (gM.castleRight.transform.position - transform.position).normalized;
                 break;
             case 1:
                 direction = (gM.castleLast.transform.position - transform.position).normalized;
@@ -174,7 +174,7 @@ public class CharSc : MonoBehaviour
     }
     void SetClonable()
     {
-        forwardForce = gM.defCharForwardForce;
+        forwardForce = gameObject.CompareTag("Giant") ? gM.defCharForwardForce * 2 : gM.defCharForwardForce;
         throwed = false;
         clonable = true;
     }
