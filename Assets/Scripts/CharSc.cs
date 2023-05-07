@@ -25,7 +25,7 @@ public class CharSc : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         gM = GameObject.Find("GameManager").GetComponent<GameManager>();
         forwardForce = gM.defCharForwardForce;
-        float clonableDelayTime = gameObject.CompareTag("Giant") ? 0.8f : 0.3f;
+        float clonableDelayTime = gameObject.CompareTag("Giant") ? 0.65f : 0.3f;
         Invoke("SetClonable", clonableDelayTime);
     }
     void Start()

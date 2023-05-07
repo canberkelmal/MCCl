@@ -46,6 +46,7 @@ public class CastleSc : MonoBehaviour
 
     void HitToCastle(GameObject hittingChar)
     {
+        gM.HitToAnyCastle(gameObject);
         StartCoroutine(CastleHitAnimation());
         hitCount++;
         if (hittingChar.transform.CompareTag("Giant"))

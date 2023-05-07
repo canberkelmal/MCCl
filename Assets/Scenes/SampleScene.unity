@@ -605,6 +605,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   castleHitAnimSens: 0.0001
+  iconMovingSens: 3
   cannonAnimSens: 0.001
   horizontalSens: 1
   xMin: -10
@@ -614,6 +615,11 @@ MonoBehaviour:
   attackBarYellow: {fileID: 2032347714}
   player: {fileID: 372911683}
   mainCam: {fileID: 330585543}
+  boxFrame: {fileID: 565759549}
+  coinFrame: {fileID: 876223125}
+  boxIcon: {fileID: 2457733797072364862, guid: f7fcc4ca4b75f9c4f9f39cf76639bb13, type: 3}
+  coinIcon: {fileID: 2888722358264997199, guid: b5b3ef353e6d1a64bb07fa32a1c0542f,
+    type: 3}
   cannon: {fileID: 0}
   cannonBase: {fileID: 0}
   environment: {fileID: 1086248956}
@@ -641,6 +647,8 @@ MonoBehaviour:
   environmentRotateSens: 70
   castleCount: 2
   controls: 1
+  coinCount: 0
+  boxCount: 0
   charMat: {fileID: 2100000, guid: 2c2531ee27184804680d3dae47230943, type: 2}
   enemyMat: {fileID: 2100000, guid: 1af1120cce56d3744b27e7c3896510eb, type: 2}
 --- !u!4 &133115851
@@ -1372,7 +1380,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 417511894}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -3179,7 +3187,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 986782071}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

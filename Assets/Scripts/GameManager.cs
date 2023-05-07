@@ -11,6 +11,7 @@ using UnityEngine.UIElements;
 public class GameManager : MonoBehaviour
 {
     public float castleHitAnimSens = 0.002f,
+                 iconMovingSens = 1f,
                  cannonAnimSens = 0.002f,
                  horizontalSens = 1f, 
                  xMin = 1f,
@@ -19,7 +20,7 @@ public class GameManager : MonoBehaviour
 
     public UnityEngine.UI.Image attackBar, attackBarYellow;
     public Transform player;
-    public GameObject mainCam, cannon, cannonBase, environment, center, center2, char1, giant, enemy1, enemy2, castleLeft, castleRight, castleLef2, castleRight2, castleLast, movingGate, chapter1, chapter2;
+    public GameObject mainCam, boxFrame, coinFrame, boxIcon, coinIcon, cannon, cannonBase, environment, center, center2, char1, giant, enemy1, enemy2, castleLeft, castleRight, castleLef2, castleRight2, castleLast, movingGate, chapter1, chapter2;
     public float throwForce = 1f;
     public float defCharForwardForce = 1f;
     public float defEnemyForwardForce = 1f;
@@ -32,6 +33,8 @@ public class GameManager : MonoBehaviour
 
     public int castleCount = 2;
     public bool controls = true;
+
+    public int coinCount = 0, boxCount = 0;
 
     public Material charMat, enemyMat;
 
@@ -176,27 +179,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void DestroyCastle(GameObject destroyedCastle)
-    {
-        if(castleCount == 2)
-        {
-            castleLast = destroyedCastle == castleLeft ? castleRight : castleLeft;
-            castleCount--;
-            Destroy(destroyedCastle);
-        }
-        else if(castleCount == 1)
-        {
-            castleLast = destroyedCastle == castleLeft ? castleRight : castleLeft;
-            castleCount--;
-            Destroy(destroyedCastle);
-            chapterCount--;
-            if(chapterCount >= 0)
-            {
-                GoNextChapter();
-            }
-        }
-    } 
-
     void GoNextChapter()
     {
         if(chapterCount == 1)
@@ -308,6 +290,56 @@ public class GameManager : MonoBehaviour
         castleRight = castleRight2;
         castleLeft.GetComponent<CastleSc>().enabled = true;
         castleRight.GetComponent<CastleSc>().enabled = true;
+    }
+
+    public void DestroyCastle(GameObject destroyedCastle)
+    {
+        GetCoinFromCastle(destroyedCastle);
+        if (castleCount == 2)
+        {
+            castleLast = destroyedCastle == castleLeft ? castleRight : castleLeft;
+            castleCount--;
+
+            Destroy(destroyedCastle);
+        }
+        else if (castleCount == 1)
+        {
+            castleLast = destroyedCastle == castleLeft ? castleRight : castleLeft;
+            castleCount--;
+            Destroy(destroyedCastle);
+            chapterCount--;
+            if (chapterCount >= 0)
+            {
+                GoNextChapter();
+            }
+        }
+    }
+
+    public void GetCoinFromCastle(GameObject castle)
+    {
+        Vector3 castleScreenPosition = Camera.main.WorldToScreenPoint(castle.transform.position);
+
+        GameObject movingCoin = Instantiate(coinIcon, castleScreenPosition, Quaternion.identity);
+        movingCoin.transform.parent = coinFrame.transform;
+    }
+
+    public void HitToAnyCastle(GameObject hitCastle)
+    {
+        Vector3 castleScreenPosition = Camera.main.WorldToScreenPoint(hitCastle.transform.position);
+
+        GameObject movingBox = Instantiate(boxIcon, castleScreenPosition, Quaternion.identity);
+        movingBox.transform.parent = boxFrame.transform;
+    }
+
+    public void IncreaseBoxCount()
+    {
+        boxCount++;
+        boxFrame.transform.GetChild(2).GetComponent<Text>().text = boxCount.ToString();
+    }
+    public void IncreaseCoinCount()
+    {
+        coinCount+=200;
+        coinFrame.transform.GetChild(2).GetComponent<Text>().text = coinCount.ToString();
     }
 
     void FinishChapters()
