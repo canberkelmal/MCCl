@@ -24,12 +24,13 @@ public class CharSc : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         gM = GameObject.Find("GameManager").GetComponent<GameManager>();
-        forwardForce = gM.defCharForwardForce * 2;
+        forwardForce = gM.defCharForwardForce;
         Invoke("SetClonable", 0.2f);
     }
     void Start()
     {
         tempMat = new Material(gM.charMat);
+        InvokeRepeating("CheckStuck", 0, 0.25f);
     }
 
     // Update is called once per frame
@@ -79,6 +80,25 @@ public class CharSc : MonoBehaviour
             if (collision.transform.CompareTag("Enemy") || collision.transform.CompareTag("Castle"))
             {
                 TakeHit();
+            }
+        }
+    }
+    void CheckStuck()
+    {
+        Debug.Log(rb.velocity.magnitude);
+        if (rb.velocity.magnitude < 1)
+        {
+            Debug.Log(rb.velocity.magnitude);
+            int rnd = (int)UnityEngine.Random.Range(0, 10);
+            if (rnd < 5)
+            {
+                Debug.Log("pushed right");
+                rb.AddForce(transform.right * 5, ForceMode.Impulse);
+            }
+            else
+            {
+                Debug.Log("pushed left");
+                rb.AddForce(-transform.right * 5, ForceMode.Impulse);
             }
         }
     }
@@ -136,7 +156,7 @@ public class CharSc : MonoBehaviour
     }
     void SetClonable()
     {
-        forwardForce = throwed ? forwardForce : gM.defCharForwardForce;
+        forwardForce = gM.defCharForwardForce;
         throwed = false;
         clonable = true;
     }

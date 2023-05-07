@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
 
     public Material charMat, enemyMat;
 
+    int chapterCount = 2;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -167,9 +169,11 @@ public class GameManager : MonoBehaviour
             castleLast = destroyedCastle == castleLeft ? castleRight : castleLeft;
             castleCount--;
             Destroy(destroyedCastle);
+            chapterCount--;
+            if(chapterCount > 0)
             GoNextChapter();
         }
-    }
+    } 
 
     void GoNextChapter()
     {

@@ -46,25 +46,6 @@ public class EnemySc : MonoBehaviour
         }
     }
 
-    void CheckStuck()
-    {
-        Debug.Log(rb.velocity.magnitude);
-        if (rb.velocity.magnitude < 1)
-        {
-            Debug.Log(rb.velocity.magnitude);
-            int rnd = (int)UnityEngine.Random.Range(0, 10);
-            if(rnd < 5)
-            {
-                Debug.Log("pushed right");
-                rb.AddForce(transform.right*5, ForceMode.Impulse);
-            }
-            else
-            { 
-                Debug.Log("pushed left");
-                rb.AddForce(-transform.right*5, ForceMode.Impulse); 
-            }
-        }
-    }
 
     void OnCollisionEnter(Collision collision)
     {
@@ -88,6 +69,25 @@ public class EnemySc : MonoBehaviour
             if (collision.transform.CompareTag("Char") || collision.transform.CompareTag("Giant"))
             {
                 TakeHit();
+            }
+        }
+    }
+    void CheckStuck()
+    {
+        Debug.Log(rb.velocity.magnitude);
+        if (rb.velocity.magnitude < 1)
+        {
+            Debug.Log(rb.velocity.magnitude);
+            int rnd = (int)UnityEngine.Random.Range(0, 10);
+            if (rnd < 5)
+            {
+                Debug.Log("pushed right");
+                rb.AddForce(transform.right * 5, ForceMode.Impulse);
+            }
+            else
+            {
+                Debug.Log("pushed left");
+                rb.AddForce(-transform.right * 5, ForceMode.Impulse);
             }
         }
     }
