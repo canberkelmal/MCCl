@@ -25,7 +25,8 @@ public class CharSc : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         gM = GameObject.Find("GameManager").GetComponent<GameManager>();
         forwardForce = gM.defCharForwardForce;
-        Invoke("SetClonable", 0.2f);
+        float clonableDelayTime = gameObject.CompareTag("Giant") ? 0.5f : 0.3f;
+        Invoke("SetClonable", clonableDelayTime);
     }
     void Start()
     {
@@ -55,7 +56,7 @@ public class CharSc : MonoBehaviour
     {
         if (other.CompareTag("Gate") && clonable)
         {
-            DuplicateChar(2);
+            DuplicateChar(other.GetComponent<GateSc>().gateMultipier);
         }
     }
 
@@ -85,19 +86,19 @@ public class CharSc : MonoBehaviour
     }
     void CheckStuck()
     {
-        Debug.Log(rb.velocity.magnitude);
+        //Debug.Log(rb.velocity.magnitude);
         if (rb.velocity.magnitude < 1)
         {
-            Debug.Log(rb.velocity.magnitude);
+            //Debug.Log(rb.velocity.magnitude);
             int rnd = (int)UnityEngine.Random.Range(0, 10);
             if (rnd < 5)
             {
-                Debug.Log("pushed right");
+                //Debug.Log("pushed right");
                 rb.AddForce(transform.right * 5, ForceMode.Impulse);
             }
             else
             {
-                Debug.Log("pushed left");
+                //Debug.Log("pushed left");
                 rb.AddForce(-transform.right * 5, ForceMode.Impulse);
             }
         }
@@ -105,11 +106,14 @@ public class CharSc : MonoBehaviour
 
     void TakeHit()
     {
-        whiting = true;
-        tempMat.color = gM.charMat.color;
-        colorTimer = 0;
-        transform.GetChild(0).GetComponent<Renderer>().material = tempMat;
-        InvokeRepeating("PaintWhite", 0, Time.fixedDeltaTime);
+        if (!gameObject.CompareTag("Giant"))
+        {
+            whiting = true;
+            tempMat.color = gM.charMat.color;
+            colorTimer = 0;
+            transform.GetChild(0).GetComponent<Renderer>().material = tempMat;
+            InvokeRepeating("PaintWhite", 0, Time.fixedDeltaTime);
+        }
 
         hitCount++;
         if (hitCount == health)
@@ -144,7 +148,7 @@ public class CharSc : MonoBehaviour
         for(int i = 0; i < duplicateMultiplier; i++)
         {
             float horRandom = (float)Random.Range(-duplicateMultiplier*3, duplicateMultiplier*3) / 10;
-            float verRandom = (float)Random.Range(6, 12) / 10;
+            float verRandom = gameObject.CompareTag("Giant") ? (float)Random.Range(15, 25) / 10 : (float)Random.Range(6, 12) / 10;
             Instantiate(gameObject, transform.position + (Vector3.right * horRandom) + (Vector3.forward * verRandom), transform.rotation);
         }
         Destroy(gameObject);

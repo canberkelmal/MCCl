@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
 
     public Image attackBar, attackBarYellow;
     public Transform player;
-    public GameObject cannon, environment, center, char1, giant, enemy1, enemy2, castleLeft, castleRight, castleLef2, castleRight2, castleLast, movingGate;
+    public GameObject cannon, environment, center, char1, giant, enemy1, enemy2, castleLeft, castleRight, castleLef2, castleRight2, castleLast, movingGate, chapter1, chapter2;
     public float throwForce = 1f;
     public float defCharForwardForce = 1f;
     public float defEnemyForwardForce = 1f;
@@ -170,16 +170,25 @@ public class GameManager : MonoBehaviour
             castleCount--;
             Destroy(destroyedCastle);
             chapterCount--;
-            if(chapterCount > 0)
+            if(chapterCount >= 0)
             GoNextChapter();
         }
     } 
 
     void GoNextChapter()
     {
-        InvokeRepeating("MoveEnvironment", 0, Time.fixedDeltaTime);
-        CancelInvoke("SpawnAndThrowChar");
-        Debug.Log("Go to next chapter!");
+        if(chapterCount == 1)
+        {
+            Destroy(chapter1);
+            InvokeRepeating("MoveEnvironment", 0, Time.fixedDeltaTime);
+            CancelInvoke("SpawnAndThrowChar");
+            Debug.Log("Go to next chapter!");
+        }
+        else if(chapterCount == 0)
+        {
+            Destroy(chapter2);
+            FinishChapters();
+        }
     }
 
     void MoveEnvironment()
@@ -210,7 +219,6 @@ public class GameManager : MonoBehaviour
             controls = true;
             CancelInvoke("MoveEnvironment");
         }
-
     }
 
     void SetSecondChapter()
@@ -221,6 +229,10 @@ public class GameManager : MonoBehaviour
         castleRight = castleRight2;
         castleLeft.GetComponent<CastleSc>().enabled = true;
         castleRight.GetComponent<CastleSc>().enabled = true;
+    }
+
+    void FinishChapters()
+    {
 
     }
 
