@@ -73,6 +73,10 @@ public class CharSc : MonoBehaviour
         {
             timer += Time.deltaTime;
         }
+        else if (collision.transform.CompareTag("Obs"))
+        {
+            HitBackFrom(collision.transform);
+        }
 
         if (timer >= gM.hitTimeDiff)
         {
@@ -83,6 +87,11 @@ public class CharSc : MonoBehaviour
                 TakeHit();
             }
         }
+    }
+    void HitBackFrom(Transform refObj)
+    {
+        Vector3 dir = transform.position - refObj.position;
+        rb.AddForce(direction.normalized * 5, ForceMode.Impulse);
     }
     void CheckStuck()
     {

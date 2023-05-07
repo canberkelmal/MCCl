@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
 
     public Image attackBar, attackBarYellow;
     public Transform player;
-    public GameObject cannon, environment, center, char1, giant, enemy1, enemy2, castleLeft, castleRight, castleLef2, castleRight2, castleLast, movingGate, chapter1, chapter2;
+    public GameObject cannon, cannonBase, environment, center, center2, char1, giant, enemy1, enemy2, castleLeft, castleRight, castleLef2, castleRight2, castleLast, movingGate, chapter1, chapter2;
     public float throwForce = 1f;
     public float defCharForwardForce = 1f;
     public float defEnemyForwardForce = 1f;
@@ -35,11 +35,14 @@ public class GameManager : MonoBehaviour
     public Material charMat, enemyMat;
 
     int chapterCount = 2;
+    bool movementCenter1 = false, movementCenter2 = false;
+    Vector3 cannonMovementDirection = Vector3.zero;
 
     // Start is called before the first frame update
     void Start()
     {
         cannon = player.GetChild(0).GetChild(0).gameObject;
+        cannonBase = player.GetChild(0).GetChild(1).gameObject;
     }
 
     // Update is called once per frame
@@ -180,7 +183,7 @@ public class GameManager : MonoBehaviour
         if(chapterCount == 1)
         {
             Destroy(chapter1);
-            InvokeRepeating("MoveEnvironment", 0, Time.fixedDeltaTime);
+            InvokeRepeating("MoveCannon", 0, Time.fixedDeltaTime);
             CancelInvoke("SpawnAndThrowChar");
             Debug.Log("Go to next chapter!");
         }
@@ -191,13 +194,53 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void MoveCannon()
+    {
+        controls = false;
+        if(!movementCenter1  && !movementCenter2)
+        {
+            cannonMovementDirection = center.transform.position;
+
+            cannonBase.transform.localRotation = Quaternion.RotateTowards(cannonBase.transform.localRotation, Quaternion.Euler(-90, 0, -90), environmentRotateSens * 3 * Time.deltaTime);
+        }
+        else if(movementCenter1 && !movementCenter2)
+        {
+            cannonMovementDirection = center2.transform.position;
+
+            player.transform.rotation = Quaternion.RotateTowards(player.transform.rotation, Quaternion.Euler(0, 30.584f, 0), environmentRotateSens * Time.deltaTime);
+            cannonBase.transform.localRotation = Quaternion.RotateTowards(cannonBase.transform.localRotation, Quaternion.Euler(-90, 0, 0), environmentRotateSens* 2 * Time.deltaTime);
+        }
+        else if(movementCenter1 && movementCenter2)
+        {
+            SetSecondChapter();
+            player.transform.position = center2.transform.position;
+            player.transform.rotation = Quaternion.Euler(0, 30.584f, 0);
+            cannonBase.transform.localRotation = Quaternion.Euler(-90, 0, 0);
+            controls = true;
+            CancelInvoke("MoveCannon");
+        }
+        player.transform.position = Vector3.MoveTowards(player.transform.position, cannonMovementDirection, environmentMovementSens * Time.fixedDeltaTime);
+    }
+
+    public void TrigCenter1()
+    {
+        movementCenter1 = true;
+    }
+
+    public void TrigCenter2()
+    {
+        movementCenter2 = true;
+    }
+
     void MoveEnvironment()
     {
         controls = false;
         player.transform.position = player.transform.position.x != 0 ? Vector3.MoveTowards(player.transform.position, new Vector3(0, player.transform.position.y, player.transform.position.z), environmentMovementSens * 4 * Time.deltaTime) : player.transform.position;
+        
         if(environment.transform.position.z > -72.4f)
         {
             environment.transform.position = Vector3.MoveTowards(environment.transform.position, Vector3.forward * -72.4f, environmentMovementSens * Time.deltaTime);
+            cannonBase.transform.rotation = Quaternion.RotateTowards(cannonBase.transform.rotation, Quaternion.Euler(-90, 0, -90), environmentRotateSens * 3f * Time.deltaTime);
         }
         /*
         else if (environment.transform.rotation.eulerAngles.y == 0 || environment.transform.rotation.eulerAngles.y > 360 - 30.584f)
@@ -210,6 +253,7 @@ public class GameManager : MonoBehaviour
         {
             environment.transform.position = Vector3.MoveTowards(environment.transform.position, new Vector3(2.07f, 0, - 92.156f), environmentMovementSens * Time.deltaTime);
             environment.transform.rotation = Quaternion.RotateTowards(environment.transform.rotation, Quaternion.Euler(0, -30.584f, 0), environmentRotateSens * Time.deltaTime);
+            cannonBase.transform.rotation = Quaternion.RotateTowards(cannonBase.transform.rotation, Quaternion.Euler(-90, 0, 0), environmentRotateSens * 3f * Time.deltaTime);
         }
         else if(environment.transform.position.z <= -92.156f)
         {

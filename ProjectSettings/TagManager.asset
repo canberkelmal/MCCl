@@ -10,6 +10,10 @@ TagManager:
   - Char
   - Enemy
   - Giant
+  - Obs
+  - Center
+  - Center1
+  - Center2
   layers:
   - Default
   - TransparentFX
