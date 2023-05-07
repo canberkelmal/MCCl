@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviour
                  cannonAnimSens = 0.002f,
                  horizontalSens = 1f, 
                  xMin = 1f,
-                 xMax = 1f;
+                 xMax = 1f,
+                 mobMaxVelocity = 1f;
 
     public Image attackBar, attackBarYellow;
     public Transform player;
@@ -132,7 +133,7 @@ public class GameManager : MonoBehaviour
         GameObject spawnedChar = Instantiate(spawnedCharacter, player.position + player.transform.forward * 2.5f, Quaternion.identity);
         spawnedChar.GetComponent<CharSc>().ThrowChar();
 
-        spawnedChar.GetComponent<NavMeshAgent>().avoidancePriority = spawnedChar.CompareTag("Giant") ? 99 : UnityEngine.Random.Range(0, 50);
+        //spawnedChar.GetComponent<NavMeshAgent>().avoidancePriority = spawnedChar.CompareTag("Giant") ? 99 : UnityEngine.Random.Range(0, 50);
 
         if (!isGiant)
         {

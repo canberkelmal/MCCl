@@ -19,27 +19,53 @@ public class EnemySc : MonoBehaviour
 
     Material defMat, tempMat;
     bool whiting = true;
+
+    Vector3 targetForce = Vector3.zero;
+    float maxVelocity = 1;
     // Start is called before the first frame update
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        //forwardForce = gM.defEnemyForwardForce *2;
         gM = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
     void Start()
     {
         tempMat = new Material(gM.enemyMat);
+        InvokeRepeating("CheckStuck", 0, 0.25f);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.LookAt(transform.position + Vector3.back);
+        //transform.LookAt(transform.position + Vector3.back);
         rb.velocity = throwed ? direction : transform.forward * forwardForce;
         if (gM.castleCount == 0)
         {
             Destroy(gameObject);
         }
     }
+
+    void CheckStuck()
+    {
+        Debug.Log(rb.velocity.magnitude);
+        if (rb.velocity.magnitude < 1)
+        {
+            Debug.Log(rb.velocity.magnitude);
+            int rnd = (int)UnityEngine.Random.Range(0, 10);
+            if(rnd < 5)
+            {
+                Debug.Log("pushed right");
+                rb.AddForce(transform.right*5, ForceMode.Impulse);
+            }
+            else
+            { 
+                Debug.Log("pushed left");
+                rb.AddForce(-transform.right*5, ForceMode.Impulse); 
+            }
+        }
+    }
+
     void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.CompareTag("Char") || collision.transform.CompareTag("Giant"))
@@ -98,7 +124,7 @@ public class EnemySc : MonoBehaviour
             transform.GetChild(0).GetComponent<Renderer>().material = gM.enemyMat;
             CancelInvoke("PaintWhite");
         }
-    }
+    } 
 
     public void ThrowEnemy(Vector3 throwDir)
     {
