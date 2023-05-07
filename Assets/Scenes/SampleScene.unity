@@ -637,6 +637,8 @@ MonoBehaviour:
   movingGate: {fileID: 1462250539}
   chapter1: {fileID: 2070725527}
   chapter2: {fileID: 1354794275}
+  littleParticle: {fileID: 187952, guid: c05e92eaee7a00844867e5edc8e0dde1, type: 3}
+  explosiveParticle: {fileID: 105310, guid: e6ea0c2b13012484ba2f5dc1054e6d75, type: 3}
   throwForce: 15
   defCharForwardForce: 5
   defEnemyForwardForce: 5

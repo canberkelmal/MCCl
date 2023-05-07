@@ -42,6 +42,8 @@ public class EnemySc : MonoBehaviour
         rb.velocity = throwed ? direction : transform.forward * forwardForce;
         if (gM.castleCount == 0)
         {
+            GameObject partEffect = Instantiate(gM.littleParticle, transform.position, Quaternion.identity);
+            Destroy(partEffect, 1.5f);
             Destroy(gameObject);
         }
     }
@@ -103,6 +105,8 @@ public class EnemySc : MonoBehaviour
         hitCount++;
         if (hitCount == health)
         {
+            GameObject partEffect = Instantiate(gM.littleParticle, transform.position, Quaternion.identity);
+            Destroy(partEffect, 1.5f);
             Destroy(gameObject);
         }
     }

@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     public UnityEngine.UI.Image attackBar, attackBarYellow;
     public Transform player;
     public GameObject mainCam, boxFrame, coinFrame, boxIcon, coinIcon, cannon, cannonBase, environment, center, center2, char1, giant, enemy1, enemy2, castleLeft, castleRight, castleLef2, castleRight2, castleLast, movingGate, chapter1, chapter2;
+    public GameObject littleParticle, explosiveParticle;
     public float throwForce = 1f;
     public float defCharForwardForce = 1f;
     public float defEnemyForwardForce = 1f;

@@ -46,6 +46,8 @@ public class CharSc : MonoBehaviour
                 direction = (gM.castleLast.transform.position - transform.position).normalized;
                 break;
             case 0:
+                GameObject partEffect = gameObject.CompareTag("Giant") ? Instantiate(gM.explosiveParticle, transform.position, Quaternion.identity) : Instantiate(gM.littleParticle, transform.position, Quaternion.identity);
+                Destroy(partEffect, 1.5f);
                 Destroy(gameObject);
                 break;
         }
@@ -125,8 +127,10 @@ public class CharSc : MonoBehaviour
         }
 
         hitCount++;
-        if (hitCount == health)
+        if (hitCount >= health)
         {
+            GameObject partEffect = gameObject.CompareTag("Giant") ? Instantiate(gM.explosiveParticle, transform.position, Quaternion.identity) : Instantiate(gM.littleParticle, transform.position, Quaternion.identity);
+            Destroy(partEffect, 1.5f);
             Destroy(gameObject);
         }
     }

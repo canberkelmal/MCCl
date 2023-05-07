@@ -55,6 +55,8 @@ public class CastleSc : MonoBehaviour
         }
         if (hitCount == health)
         {
+            GameObject partEffect = Instantiate(gM.explosiveParticle, transform.position, Quaternion.identity);
+            Destroy(partEffect, 1.5f);
             gM.DestroyCastle(gameObject);
         }
     }
