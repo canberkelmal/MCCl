@@ -155,8 +155,7 @@ public class GameManager : MonoBehaviour
         GameObject spawnedChar = Instantiate(spawnedCharacter, player.position + player.transform.forward * 2.5f, Quaternion.identity);
         spawnedChar.transform.rotation = Quaternion.Euler(0, player.transform.rotation.eulerAngles.y, 0);
         spawnedChar.GetComponent<CharSc>().ThrowChar();
-
-        //spawnedChar.GetComponent<NavMeshAgent>().avoidancePriority = spawnedChar.CompareTag("Giant") ? 99 : UnityEngine.Random.Range(0, 50);
+        spawnedChar.GetComponent<NavMeshAgent>().avoidancePriority = spawnedChar.CompareTag("Giant") ? UnityEngine.Random.Range(51, 99) : UnityEngine.Random.Range(0, 50);
 
         if (!isGiant)
         {
