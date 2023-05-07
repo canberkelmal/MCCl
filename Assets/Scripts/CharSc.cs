@@ -25,7 +25,7 @@ public class CharSc : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         gM = GameObject.Find("GameManager").GetComponent<GameManager>();
         forwardForce = gM.defCharForwardForce;
-        float clonableDelayTime = gameObject.CompareTag("Giant") ? 0.5f : 0.3f;
+        float clonableDelayTime = gameObject.CompareTag("Giant") ? 0.8f : 0.3f;
         Invoke("SetClonable", clonableDelayTime);
     }
     void Start()
@@ -156,9 +156,10 @@ public class CharSc : MonoBehaviour
     {
         for(int i = 0; i < duplicateMultiplier; i++)
         {
-            float horRandom = (float)Random.Range(-duplicateMultiplier*3, duplicateMultiplier*3) / 10;
-            float verRandom = gameObject.CompareTag("Giant") ? (float)Random.Range(15, 25) / 10 : (float)Random.Range(6, 12) / 10;
-            Instantiate(gameObject, transform.position + (Vector3.right * horRandom) + (Vector3.forward * verRandom), transform.rotation);
+            //float horRandom = (float)Random.Range(-duplicateMultiplier*3, duplicateMultiplier*3) / 10; 
+            float verRandom = gameObject.CompareTag("Giant") ? (float)Random.Range(20, 25) / 10 : (float)Random.Range(6, 12) / 10;
+            Instantiate(gameObject, transform.position + (Vector3.forward * verRandom), transform.rotation);
+            //Instantiate(gameObject, transform.position + (Vector3.right * horRandom) + (Vector3.forward * verRandom), transform.rotation);
         }
         Destroy(gameObject);
     }

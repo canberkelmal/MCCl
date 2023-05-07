@@ -92,7 +92,8 @@ public class CastleSc : MonoBehaviour
             Vector3 spawnPoint = transform.position - transform.up * 3;
             spawnPoint.y = 1.1f;
             GameObject spawnedChar = Instantiate(gM.enemy1, spawnPoint, Quaternion.identity);
-            spawnedChar.transform.rotation = Quaternion.Euler(0, 180, 0);
+            Debug.Log(transform.rotation.eulerAngles.y);
+            spawnedChar.transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
             //spawnedChar.GetComponent<NavMeshAgent>().avoidancePriority = UnityEngine.Random.Range(0, 50);
             Vector3 throwDirection = -transform.up * gM.defEnemyForwardForce * 2 + transform.right * (float)Random.Range(-4f, 4f);
             spawnedChar.GetComponent<EnemySc>().ThrowEnemy(throwDirection);

@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,9 +17,9 @@ public class GameManager : MonoBehaviour
                  xMax = 1f,
                  mobMaxVelocity = 1f;
 
-    public Image attackBar, attackBarYellow;
+    public UnityEngine.UI.Image attackBar, attackBarYellow;
     public Transform player;
-    public GameObject cannon, cannonBase, environment, center, center2, char1, giant, enemy1, enemy2, castleLeft, castleRight, castleLef2, castleRight2, castleLast, movingGate, chapter1, chapter2;
+    public GameObject mainCam, cannon, cannonBase, environment, center, center2, char1, giant, enemy1, enemy2, castleLeft, castleRight, castleLef2, castleRight2, castleLast, movingGate, chapter1, chapter2;
     public float throwForce = 1f;
     public float defCharForwardForce = 1f;
     public float defEnemyForwardForce = 1f;
@@ -38,6 +39,14 @@ public class GameManager : MonoBehaviour
     bool movementCenter1 = false, movementCenter2 = false;
     Vector3 cannonMovementDirection = Vector3.zero;
 
+    float zMin, zMax;
+    float camOffsetY;
+    float camOffsetZ;
+    private void Awake()
+    {
+        camOffsetY = mainCam.transform.position.y - player.transform.position.y;
+        camOffsetZ = mainCam.transform.position.z - player.transform.position.z;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -78,9 +87,17 @@ public class GameManager : MonoBehaviour
     {
         float mouseX = Input.GetAxis("Mouse X");
         float moveAmount = mouseX * horizontalSens;
-        Vector3 newPosX = player.position + new Vector3(moveAmount, 0, 0);
-        newPosX.x = Mathf.Clamp(newPosX.x, xMin, xMax);
-        player.transform.position = newPosX;
+        Vector3 newPosX = player.position + player.transform.right * moveAmount;
+        if(chapterCount < 2)
+        {
+            newPosX.x = Mathf.Clamp(newPosX.x, xMin, xMax);
+            newPosX.z = Mathf.Clamp(newPosX.z, zMin, zMax);
+        }
+        else
+        {
+            newPosX.x = Mathf.Clamp(newPosX.x, xMin, xMax);
+        }
+        player.position = newPosX;  
     }
 
     void StartCharSpawning()
@@ -136,6 +153,7 @@ public class GameManager : MonoBehaviour
     void SpawnChar(GameObject spawnedCharacter, bool isGiant)
     {
         GameObject spawnedChar = Instantiate(spawnedCharacter, player.position + player.transform.forward * 2.5f, Quaternion.identity);
+        spawnedChar.transform.rotation = Quaternion.Euler(0, player.transform.rotation.eulerAngles.y, 0);
         spawnedChar.GetComponent<CharSc>().ThrowChar();
 
         //spawnedChar.GetComponent<NavMeshAgent>().avoidancePriority = spawnedChar.CompareTag("Giant") ? 99 : UnityEngine.Random.Range(0, 50);
@@ -174,7 +192,9 @@ public class GameManager : MonoBehaviour
             Destroy(destroyedCastle);
             chapterCount--;
             if(chapterCount >= 0)
-            GoNextChapter();
+            {
+                GoNextChapter();
+            }
         }
     } 
 
@@ -200,8 +220,14 @@ public class GameManager : MonoBehaviour
         if(!movementCenter1  && !movementCenter2)
         {
             cannonMovementDirection = center.transform.position;
+            player.transform.position = Vector3.MoveTowards(player.transform.position, new Vector3(center.transform.position.x, player.transform.position.y, player.transform.position.z), environmentMovementSens * Time.fixedDeltaTime);
 
             cannonBase.transform.localRotation = Quaternion.RotateTowards(cannonBase.transform.localRotation, Quaternion.Euler(-90, 0, -90), environmentRotateSens * 3 * Time.deltaTime);
+
+            if(player.transform.position.x == center.transform.position.x && mainCam.transform.parent != player.transform)
+            {
+                mainCam.transform.parent = player.transform;
+            }
         }
         else if(movementCenter1 && !movementCenter2)
         {
@@ -212,10 +238,11 @@ public class GameManager : MonoBehaviour
         }
         else if(movementCenter1 && movementCenter2)
         {
-            SetSecondChapter();
             player.transform.position = center2.transform.position;
             player.transform.rotation = Quaternion.Euler(0, 30.584f, 0);
             cannonBase.transform.localRotation = Quaternion.Euler(-90, 0, 0);
+            mainCam.transform.parent = null;
+            SetSecondChapter();
             controls = true;
             CancelInvoke("MoveCannon");
         }
@@ -257,9 +284,9 @@ public class GameManager : MonoBehaviour
         }
         else if(environment.transform.position.z <= -92.156f)
         {
-            SetSecondChapter();
             environment.transform.position = new Vector3(2.07f, 0, -92.156f);
             environment.transform.rotation = Quaternion.Euler(0, -30.584f, 0);
+            SetSecondChapter();
             controls = true;
             CancelInvoke("MoveEnvironment");
         }
@@ -268,6 +295,15 @@ public class GameManager : MonoBehaviour
     void SetSecondChapter()
     {
         //movingGate.GetComponent<MovingGateSc>().enabled = true;
+        zMax = player.position.z + (xMin * player.transform.right).z;
+        zMin = player.position.z + (xMax * player.transform.right).z;
+
+        xMax = player.position.x + (xMax * player.transform.right).x;
+        xMin = player.position.x + (xMin * player.transform.right).x;
+
+        Debug.Log(zMax + " - " + zMin + " - " + xMax + " - " + xMin);
+
+
         castleCount = 2;
         castleLeft = castleLef2;
         castleRight = castleRight2;
