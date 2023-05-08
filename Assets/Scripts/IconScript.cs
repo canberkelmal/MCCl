@@ -16,7 +16,7 @@ public class IconScript : MonoBehaviour
     void FixedUpdate()
     {
         transform.localPosition = Vector2.Lerp(transform.localPosition, Vector2.zero, gM.iconMovingSens * Time.deltaTime);
-        if(transform.localPosition.y < 65 && transform.localPosition.y > -65)
+        if(transform.localPosition.y < 65 && transform.localPosition.y > -65 && transform.localPosition.x < 137 && transform.localPosition.x > -137)
         {
             if (gameObject.CompareTag("BoxIcon"))
             {

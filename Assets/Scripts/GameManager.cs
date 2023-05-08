@@ -20,8 +20,8 @@ public class GameManager : MonoBehaviour
 
     public UnityEngine.UI.Image attackBar, attackBarYellow;
     public Transform player;
-    public GameObject mainCam, finalPanel, finishPanel, boxFrame, coinFrame, boxIcon, coinIcon, cannon, cannonBase, environment, center, center2, char1, giant, enemy1, enemy2, finalVillage, castleLeft, castleRight, castleLef2, castleRight2, castleLast, movingGate, chapter1, chapter2;
-    public GameObject littleParticle, explosiveParticle;
+    public GameObject mainCam, tapTx, finalPanel, finishPanel, boxFrame, coinFrame, boxIcon, coinIcon, cannon, cannonBase, environment, center, center2, char1, giant, enemy1, enemy2, finalVillage, castleLeft, castleRight, castleLef2, castleRight2, castleLast, movingGate, chapter1, chapter2;
+    public GameObject littleParticle, explosiveParticle, villageFires;
     public float throwForce = 1f;
     public float defCharForwardForce = 1f;
     public float defEnemyForwardForce = 1f;
@@ -33,15 +33,14 @@ public class GameManager : MonoBehaviour
     public float environmentRotateSens = 1f;
 
     public int castleCount = 2;
-    public bool controls = true;
-    public bool isFinished=false;
+    public bool controls = true, isFinished = false;
 
     public int coinCount = 0, boxCount = 0;
 
     public Material charMat, enemyMat;
 
     public int chapterCount = 2;
-    bool movementCenter1 = false, movementCenter2 = false;
+    bool movementCenter1 = false, movementCenter2 = false, isStarted = false;
     Vector3 cannonMovementDirection = Vector3.zero;
 
     float zMin, zMax;
@@ -51,6 +50,7 @@ public class GameManager : MonoBehaviour
     {
         camOffsetY = mainCam.transform.position.y - player.transform.position.y;
         camOffsetZ = mainCam.transform.position.z - player.transform.position.z;
+        Time.timeScale = 0f;
     }
     // Start is called before the first frame update
     void Start()
@@ -66,6 +66,12 @@ public class GameManager : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
+                if (!isStarted)
+                {
+                    isStarted = true;
+                    Time.timeScale = 1f;
+                    tapTx.SetActive(false);
+                }
                 StartCharSpawning();
             }
 
@@ -133,16 +139,16 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i <= 100; i++)
         {
             cannon.GetComponent<SkinnedMeshRenderer>().SetBlendShapeWeight(0, i);
-            i++;
-            yield return new WaitForSeconds(cannonAnimSens);
+            i+=9;
+            yield return new WaitForSeconds(cannonAnimSens * Time.fixedDeltaTime);
         }
 
         for (int i = 0; i <= 100; i++)
         {
             cannon.GetComponent<SkinnedMeshRenderer>().SetBlendShapeWeight(1, i);
             cannon.GetComponent<SkinnedMeshRenderer>().SetBlendShapeWeight(0, 100 - i);
-            i++;
-            yield return new WaitForSeconds(cannonAnimSens);
+            i += 9;
+            yield return new WaitForSeconds(cannonAnimSens * Time.fixedDeltaTime);
         }
 
         SpawnChar(throwedCharacter, isGiant);
@@ -150,8 +156,8 @@ public class GameManager : MonoBehaviour
         for (int i = 100; i >= 0; i--)
         {
             cannon.GetComponent<SkinnedMeshRenderer>().SetBlendShapeWeight(1, i);
-            i--;
-            yield return new WaitForSeconds(cannonAnimSens);
+            i -= 9;
+            yield return new WaitForSeconds(cannonAnimSens * Time.fixedDeltaTime);
         }
     }
 
@@ -296,7 +302,8 @@ public class GameManager : MonoBehaviour
 
     public void DestroyCastle(GameObject destroyedCastle)
     {
-        GetCoinFromCastle(destroyedCastle);
+        //GetCoinFromCastle(destroyedCastle);
+        StartCoroutine(SendCoins(destroyedCastle));
         if (castleCount == 2)
         {
             castleLast = destroyedCastle == castleLeft ? castleRight : castleLeft;
@@ -317,6 +324,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    IEnumerator SendCoins(GameObject castle)
+    {
+        Vector3 castlePos = castle.transform.position;
+        for (int i = 0; i < 20; i++)
+        {
+            Vector3 castleScreenPosition = Camera.main.WorldToScreenPoint(castlePos);
+            GameObject movingCoin = Instantiate(coinIcon, castleScreenPosition, Quaternion.identity);
+            movingCoin.transform.parent = coinFrame.transform;
+            yield return new WaitForSeconds(0.04f);
+        }
+    }
     public void GetCoinFromCastle(GameObject castle)
     {
         Vector3 castleScreenPosition = Camera.main.WorldToScreenPoint(castle.transform.position);

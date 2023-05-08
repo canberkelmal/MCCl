@@ -12,6 +12,7 @@ public class FinalVillageSc : MonoBehaviour
     public int health = 100;
 
     bool animating = false;
+    bool fired = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +24,11 @@ public class FinalVillageSc : MonoBehaviour
         if (collision.transform.CompareTag("Char") || collision.transform.CompareTag("Giant"))
         {
             HitToCastle(collision.gameObject);
+        }
+        if(!fired)
+        {
+            fired = true;
+            gM.villageFires.SetActive(true);
         }
     }
 
@@ -46,6 +52,7 @@ public class FinalVillageSc : MonoBehaviour
 
     void HitToCastle(GameObject hittingChar)
     {
+        gM.HitToAnyCastle(gameObject);
         if (!animating)
         {
             StartCoroutine(CastleHitAnimation());
