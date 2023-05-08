@@ -25,7 +25,7 @@ public class CharSc : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         gM = GameObject.Find("GameManager").GetComponent<GameManager>();
         forwardForce = gameObject.CompareTag("Giant") ? gM.defCharForwardForce  * 2 : gM.defCharForwardForce;
-        float clonableDelayTime = gameObject.CompareTag("Giant") ? 0.4f : 0.3f;
+        float clonableDelayTime = gameObject.CompareTag("Giant") ? 0.5f : 0.3f;
         Invoke("SetClonable", clonableDelayTime);
     }
     void Start()
@@ -46,11 +46,19 @@ public class CharSc : MonoBehaviour
                 direction = (gM.castleLast.transform.position - transform.position).normalized;
                 break;
             case 0:
-                GameObject partEffect = gameObject.CompareTag("Giant") ? Instantiate(gM.explosiveParticle, transform.position, Quaternion.identity) : Instantiate(gM.littleParticle, transform.position, Quaternion.identity);
-                Destroy(partEffect, 1.5f);
-                Destroy(gameObject);
+                if(gM.chapterCount == 0 && !gM.isFinished)
+                {
+                    direction = (gM.castleLast.transform.position - transform.position).normalized;
+                }
+                else
+                {
+                    GameObject partEffect = gameObject.CompareTag("Giant") ? Instantiate(gM.explosiveParticle, transform.position, Quaternion.identity) : Instantiate(gM.littleParticle, transform.position, Quaternion.identity);
+                    Destroy(partEffect, 1.5f);
+                    Destroy(gameObject);
+                }
                 break;
         }
+        direction.y = transform.position.y;
         rb.velocity = direction * forwardForce;
     }
 
@@ -97,19 +105,15 @@ public class CharSc : MonoBehaviour
     }
     void CheckStuck()
     {
-        //Debug.Log(rb.velocity.magnitude);
         if (rb.velocity.magnitude < 1)
         {
-            //Debug.Log(rb.velocity.magnitude);
             int rnd = (int)UnityEngine.Random.Range(0, 10);
             if (rnd < 5)
             {
-                //Debug.Log("pushed right");
                 rb.AddForce(transform.right * 5, ForceMode.Impulse);
             }
             else
             {
-                //Debug.Log("pushed left");
                 rb.AddForce(-transform.right * 5, ForceMode.Impulse);
             }
         }

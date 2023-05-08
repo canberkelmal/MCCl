@@ -12,11 +12,13 @@ public class CastleSc : MonoBehaviour
     public int hitCount = 0;
     float timer = 0;
     public int health = 100;
+
+    bool animating = false;
     // Start is called before the first frame update
     void Start()
     {
         gM = GameObject.Find("GameManager").GetComponent<GameManager>();
-        InvokeRepeating("SendWaves", 1, 7);
+        InvokeRepeating("SendWaves", 3, 7);
     }
 
     void OnCollisionEnter(Collision collision)
@@ -48,7 +50,10 @@ public class CastleSc : MonoBehaviour
     void HitToCastle(GameObject hittingChar)
     {
         gM.HitToAnyCastle(gameObject);
-        StartCoroutine(CastleHitAnimation());
+        if (!animating)
+        {
+            StartCoroutine(CastleHitAnimation());
+        }
         hitCount++;
         transform.GetChild(0).GetChild(0).GetComponent<Text>().text = (health - hitCount).ToString();
         if (hittingChar.transform.CompareTag("Giant"))
@@ -66,23 +71,28 @@ public class CastleSc : MonoBehaviour
 
     IEnumerator CastleHitAnimation()
     {
+        animating = true;
         SkinnedMeshRenderer renderer = gameObject.GetComponent<SkinnedMeshRenderer>();
         for(int i = 0; i < 101; i++)
         {
+            i += 2;
             renderer.SetBlendShapeWeight(0, i);
-            yield return new WaitForSeconds(gM.castleHitAnimSens);
+            yield return new WaitForSeconds(gM.castleHitAnimSens / 10000);
         }
         for(int i = 0;i < 101; i++)
         {
+            i += 2;
             renderer.SetBlendShapeWeight(1, i);
             renderer.SetBlendShapeWeight(0, 100-i);
-            yield return new WaitForSeconds(gM.castleHitAnimSens);
+            yield return new WaitForSeconds(gM.castleHitAnimSens / 10000);
         }
         for (int i = 0; i < 101; i++)
         {
+            i += 2;
             renderer.SetBlendShapeWeight(1, 100-i);
-            yield return new WaitForSeconds(gM.castleHitAnimSens);
+            yield return new WaitForSeconds(gM.castleHitAnimSens / 10000);
         }
+        animating = false;
     }
 
     void SendWaves()
@@ -100,7 +110,7 @@ public class CastleSc : MonoBehaviour
             Debug.Log(transform.rotation.eulerAngles.y);
             spawnedChar.transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
             //spawnedChar.GetComponent<NavMeshAgent>().avoidancePriority = UnityEngine.Random.Range(0, 50);
-            Vector3 throwDirection = -transform.up * gM.defEnemyForwardForce * 2 + transform.right * (float)Random.Range(-4f, 4f);
+            Vector3 throwDirection = -transform.up * gM.defEnemyForwardForce * 2 + transform.right * (float)Random.Range(-3f, 3f);
             spawnedChar.GetComponent<EnemySc>().ThrowEnemy(throwDirection);
             tempThrowedCount++;
         }

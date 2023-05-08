@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
 
     public UnityEngine.UI.Image attackBar, attackBarYellow;
     public Transform player;
-    public GameObject mainCam, boxFrame, coinFrame, boxIcon, coinIcon, cannon, cannonBase, environment, center, center2, char1, giant, enemy1, enemy2, castleLeft, castleRight, castleLef2, castleRight2, castleLast, movingGate, chapter1, chapter2;
+    public GameObject mainCam, finalPanel, finishPanel, boxFrame, coinFrame, boxIcon, coinIcon, cannon, cannonBase, environment, center, center2, char1, giant, enemy1, enemy2, finalVillage, castleLeft, castleRight, castleLef2, castleRight2, castleLast, movingGate, chapter1, chapter2;
     public GameObject littleParticle, explosiveParticle;
     public float throwForce = 1f;
     public float defCharForwardForce = 1f;
@@ -34,12 +34,13 @@ public class GameManager : MonoBehaviour
 
     public int castleCount = 2;
     public bool controls = true;
+    public bool isFinished=false;
 
     public int coinCount = 0, boxCount = 0;
 
     public Material charMat, enemyMat;
 
-    int chapterCount = 2;
+    public int chapterCount = 2;
     bool movementCenter1 = false, movementCenter2 = false;
     Vector3 cannonMovementDirection = Vector3.zero;
 
@@ -106,7 +107,7 @@ public class GameManager : MonoBehaviour
 
     void StartCharSpawning()
     {
-        InvokeRepeating("SpawnAndThrowChar",0f , 0.33f);
+        InvokeRepeating("SpawnAndThrowChar",0f , 0.25f);
     }
     void StopCharSpawning()
     {
@@ -305,10 +306,10 @@ public class GameManager : MonoBehaviour
         }
         else if (castleCount == 1)
         {
+            chapterCount--;
             castleLast = destroyedCastle == castleLeft ? castleRight : castleLeft;
             castleCount--;
             Destroy(destroyedCastle);
-            chapterCount--;
             if (chapterCount >= 0)
             {
                 GoNextChapter();
@@ -345,7 +346,21 @@ public class GameManager : MonoBehaviour
 
     void FinishChapters()
     {
+        finalPanel.SetActive(true);
+        AttackToVillage();
+    }
+    void AttackToVillage()
+    {
+        castleCount = 1;
+        castleLast = finalVillage;
+    }
 
+    public void AttackToVillageTimeDone()
+    {
+        isFinished = true;
+        castleCount = 0;
+        castleLast = null;
+        finishPanel.SetActive(true);
     }
 
     // Reload the current scene to restart the game
